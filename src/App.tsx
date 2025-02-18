@@ -1,11 +1,8 @@
 import "./App.css";
+import AppRouter from "./routes";
 
 function App() {
-  return (
-    <>
-      <h1>Vite + React</h1>
-    </>
-  );
+  return <AppRouter />;
 }
 
 export default App;
