@@ -4,7 +4,7 @@ export const theme = {
     gray300: "#888790",
     gray200: "#A2A2AC",
     gray100: "#DDDCDF",
-    white200: "#FAFAFB",
+    white200: "#79747E",
     white100: "#FAFAFB",
     white: "#FFFFFF",
     brandRed: "#FB545B",

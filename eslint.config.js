@@ -31,7 +31,7 @@ export default [
       "react/react-in-jsx-scope": "off", // React 17+에서는 필요 없음
       "@typescript-eslint/no-unused-vars": [
         "warn",
-        { argsIgnorePattern: "^_" },
+        { args: "none" }, // 함수 매개변수 검사하지 않도록 설정
       ], // 사용하지 않는 변수 경고
       "react-hooks/rules-of-hooks": "error", // Hooks 규칙 검사
       "react-hooks/exhaustive-deps": "warn", // 의존성 배열 검사
