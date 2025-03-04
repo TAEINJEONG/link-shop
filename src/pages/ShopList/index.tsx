@@ -5,8 +5,9 @@ import styled from "styled-components";
 import SortListPopup from "../../components/SortListPopup";
 import { useCallback, useState } from "react";
 import ShopBanner from "../../components/ShopBanner";
+import ShopInfo from "../../components/ShopInfo";
 
-interface ShopInfo {
+interface ShopInfoType {
   shopId: number;
   isLike: boolean;
   likeCount: number;
@@ -25,7 +26,7 @@ const ShopList = () => {
   >("productsCount");
   const [sortPopupVisible, setSortPopupVisible] = useState<boolean>(false);
   const [isBlocking, setIsBlocking] = useState<boolean>(false);
-  const [shopInfo, setShopInfo] = useState<ShopInfo>({
+  const [shopInfo, setShopInfo] = useState<ShopInfoType>({
     shopId: 1,
     isLike: false,
     likeCount: 0,
@@ -33,6 +34,11 @@ const ShopList = () => {
     shopName: "독케익의 샤줌",
     shopHandle: "dogcake",
   });
+  const [productList, setProductList] = useState<string[]>([
+    "https://cdn.pixabay.com/photo/2025/02/26/09/58/bird-9432600_1280.jpg",
+    "https://cdn.pixabay.com/photo/2025/02/22/08/35/mountain-9423779_1280.jpg",
+    "https://cdn.pixabay.com/photo/2024/06/20/12/26/child-8842052_1280.jpg",
+  ]);
 
   function changeSort(value: "recent" | "likes" | "productsCount") {
     setSortType(value);
@@ -101,6 +107,14 @@ const ShopList = () => {
         shopHandle={shopInfo.shopHandle}
         onClick={toggleLike}
       ></ShopBanner>
+      <ShopInfo
+        isLike={shopInfo.isLike}
+        likeCount={shopInfo.likeCount}
+        shopName={shopInfo.shopName}
+        shopHandle={shopInfo.shopHandle}
+        productList={productList}
+        onClick={toggleLike}
+      ></ShopInfo>
     </ShopListContainer>
   );
 };

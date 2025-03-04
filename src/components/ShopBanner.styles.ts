@@ -1,4 +1,3 @@
-// components/ShopBanner.styles.ts
 import styled, { keyframes } from "styled-components";
 
 // ✨ 애니메이션 정의
