@@ -6,6 +6,7 @@ import SortListPopup from "../../components/SortListPopup";
 import { useCallback, useState } from "react";
 import ShopBanner from "../../components/ShopBanner";
 import ShopInfo from "../../components/ShopInfo";
+import Popup from "../../components/Popup";
 
 interface ShopInfoType {
   shopId: number;
@@ -115,6 +116,7 @@ const ShopList = () => {
         productList={productList}
         onClick={toggleLike}
       ></ShopInfo>
+      <Popup type="confirm" />
     </ShopListContainer>
   );
 };

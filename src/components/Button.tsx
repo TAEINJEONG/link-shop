@@ -4,12 +4,14 @@ import styled, { css } from "styled-components";
 const StyledButton = styled.button<{
   $variant: "Primary" | "Secondary";
   size: "small" | "medium" | "large";
+  width?: number;
 }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
   cursor: pointer;
+  width: ${({ width }) => (width ? `${width}px` : "auto")};
 
   ${({ size }) => {
     switch (size) {
@@ -74,16 +76,18 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant: "Primary" | "Secondary";
   size: "small" | "medium" | "large";
+  width?: number;
 }
 
 const Button = ({
   children,
   variant = "Primary",
   size = "medium",
+  width,
   ...rest
 }: ButtonProps) => {
   return (
-    <StyledButton $variant={variant} size={size} {...rest}>
+    <StyledButton $variant={variant} size={size} width={width} {...rest}>
       {children}
     </StyledButton>
   );
