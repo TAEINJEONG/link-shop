@@ -1,14 +1,6 @@
 import styled, { keyframes } from "styled-components";
-import CloseIcon from "../assets/images/close-icon.svg";
-import CheckIcon from "../assets/images/check-icon.svg";
 
-interface SortProps {
-  active: string;
-  onClick: (value: "recent" | "likes" | "productsCount") => void;
-  onClose?: () => void;
-}
-
-const fadeIn = keyframes`
+export const fadeIn = keyframes`
   from {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.8);
@@ -19,7 +11,7 @@ const fadeIn = keyframes`
   }
 `;
 
-const mobileFadeIn = keyframes`
+export const mobileFadeIn = keyframes`
   from {
     opacity: 0;
     transform: translate(0, -50%);
@@ -30,7 +22,7 @@ const mobileFadeIn = keyframes`
   }
 `;
 
-const OutSide = styled.div`
+export const OutSide = styled.div`
   width: 100%;
   height: 100vh;
   position: fixed;
@@ -40,7 +32,7 @@ const OutSide = styled.div`
   backdrop-filter: blur(5px);
 `;
 
-const StyledPopup = styled.div`
+export const StyledPopup = styled.div`
   padding: 25px 24px;
   width: 375px;
   height: 308px;
@@ -63,13 +55,13 @@ const StyledPopup = styled.div`
   }
 `;
 
-const PopupTitle = styled.span`
+export const PopupTitle = styled.span`
   display: inline-block;
   margin-top: 15px;
   margin-bottom: 10px;
 `;
 
-const StyledCloseIcon = styled.img`
+export const StyledCloseIcon = styled.img`
   width: 23px;
   height: 23px;
   position: absolute;
@@ -78,13 +70,13 @@ const StyledCloseIcon = styled.img`
   cursor: pointer;
 `;
 
-const SortList = styled.ul`
+export const SortList = styled.ul`
   padding: 0;
   margin: 0;
   list-style: none;
 `;
 
-const SortItem = styled.li`
+export const SortItem = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -94,7 +86,7 @@ const SortItem = styled.li`
   cursor: pointer;
 `;
 
-const SortText = styled.span<{ $active: boolean }>`
+export const SortText = styled.span<{ $active: boolean }>`
   font-size: ${({ theme }) => theme.font.caption.b16.size};
   font-weight: ${({ $active, theme }) =>
     $active ? theme.font.caption.b16.weight : theme.font.caption.m16.weight};
@@ -103,36 +95,7 @@ const SortText = styled.span<{ $active: boolean }>`
     $active ? theme.colors.brandRed : theme.colors.black};
 `;
 
-const ActiveIcon = styled.img`
+export const ActiveIcon = styled.img`
   width: 23px;
   height: 23px;
 `;
-
-const SortListPopup = ({ active = "recent", onClick, onClose }: SortProps) => {
-  return (
-    <OutSide onClick={onClose}>
-      <StyledPopup onClick={(event) => event.stopPropagation()}>
-        <PopupTitle>정렬</PopupTitle>
-        <StyledCloseIcon src={CloseIcon} onClick={onClose} />
-        <SortList>
-          <SortItem onClick={() => onClick("recent")}>
-            <SortText $active={active === "recent"}>최신순(recent)</SortText>
-            {active === "recent" && <ActiveIcon src={CheckIcon} />}
-          </SortItem>
-          <SortItem onClick={() => onClick("likes")}>
-            <SortText $active={active === "likes"}>좋아요순(likes)</SortText>
-            {active === "likes" && <ActiveIcon src={CheckIcon} />}
-          </SortItem>
-          <SortItem onClick={() => onClick("productsCount")}>
-            <SortText $active={active === "productsCount"}>
-              상품 많은순(productsCount)
-            </SortText>
-            {active === "productsCount" && <ActiveIcon src={CheckIcon} />}
-          </SortItem>
-        </SortList>
-      </StyledPopup>
-    </OutSide>
-  );
-};
-
-export default SortListPopup;

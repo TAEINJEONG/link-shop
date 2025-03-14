@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import Button from "./Button";
+import Button from "../Button";
 import DeleteIcon from "../assets/images/delete-icon.svg";
 
 import {
@@ -11,7 +11,7 @@ import {
   FileImage,
   StyledDeleteIcon,
   UploaderGroup,
-} from "./ImageUploaderStyles";
+} from "./index.styles";
 
 interface UploadImage {
   file: File;

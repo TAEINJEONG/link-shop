@@ -11,7 +11,7 @@ import SortListPopup from "../../components/SortListPopup";
 import { LinkShopData } from "../../types/shopList";
 import { useSearchParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
-import ShopSkeleton from "./ShopSkeleton";
+import ShopInfoSkeleton from "../../components/ShopInfo/ShopInfoSkeleton";
 
 const ShopList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -206,7 +206,7 @@ const ShopList = () => {
           <styles.LoadingContainer>
             <styles.ShopList>
               {[1, 2, 3, 4].map((i) => (
-                <ShopSkeleton key={i} />
+                <ShopInfoSkeleton key={i} />
               ))}
             </styles.ShopList>
           </styles.LoadingContainer>
@@ -225,7 +225,7 @@ const ShopList = () => {
               </styles.NoDataMessage>
             </styles.NoDataContainer>
           ) : (
-            [1, 2, 3, 4, 5, 6, 7, 8].map((i) => <ShopSkeleton key={i} />)
+            [1, 2, 3, 4, 5, 6, 7, 8].map((i) => <ShopInfoSkeleton key={i} />)
           )}
         </styles.ShopList>
       </InfiniteScroll>

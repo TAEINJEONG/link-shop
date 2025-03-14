@@ -1,5 +1,5 @@
-import * as styles from "./Popup.styles";
-import Button from "./Button";
+import * as styles from "./index.styles";
+import Button from "../Button";
 import PopupCheck from "../assets/images/popup-check.svg";
 
 interface PopupProps {

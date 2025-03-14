@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Input from "../components/input";
-import ImageUploader from "../components/ImageUploder";
+import Input from "../Input";
+import ImageUploader from "../ImageUploader";
 
 const FileImageUploader = styled.div`
   display: flex;

@@ -1,10 +1,10 @@
-import * as styles from "./ShopInfo.styles";
-import ShopPreviewImage from "../assets/images/shop-image.svg";
-import filledHeart from "../assets/images/filled-heart.svg";
-import emptyHeart from "../assets/images/empty-heart.svg";
-import { LinkShopData } from "../types/shopList";
+import * as styles from "./index.styles";
+import ShopPreviewImage from "../../assets/images/shop-image.svg";
+import filledHeart from "../../assets/images/filled-heart.svg";
+import emptyHeart from "../../assets/images/empty-heart.svg";
+import { LinkShopData } from "../../types/shopList";
 import { useCallback, useState } from "react";
-import api from "../api/axios";
+import api from "../../api/axios";
 import { Link } from "react-router-dom";
 
 interface ShopInfoProps {

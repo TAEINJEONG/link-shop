@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import filledHeart from "../assets/images/filled-heart.svg";
-import emptyHeart from "../assets/images/empty-heart.svg";
-import Share from "../assets/images/share.svg";
-import Menu from "../assets/images/meatball-icon.svg";
-import ShopPreviewImage from "../assets/images/shop-image.svg";
-import * as styles from "./ShopBanner.styles";
-import { LinkShopData } from "../types/shopList";
-import api from "../api/axios";
-import PasswordDialog from "./PasswordDialog";
+import filledHeart from "../../assets/images/filled-heart.svg";
+import emptyHeart from "../../assets/images/empty-heart.svg";
+import Share from "../../assets/images/share.svg";
+import Menu from "../../assets/images/meatball-icon.svg";
+import ShopPreviewImage from "../../assets/images/shop-image.svg";
+import * as styles from "./index.styles";
+import { LinkShopData } from "../../types/shopList";
+import api from "../../api/axios";
+import PasswordDialog from "../PasswordDialog";
 import { useNavigate } from "react-router-dom";
 
 interface ShopInfoProps {
