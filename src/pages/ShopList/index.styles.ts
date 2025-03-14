@@ -87,3 +87,7 @@ export const NoDataImage = styled.img`
   width: 375px;
   height: 182px;
 `;
+
+export const LoadingContainer = styled.div`
+  margin-top: 24px;
+`;

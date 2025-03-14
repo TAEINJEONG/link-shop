@@ -11,12 +11,14 @@ import SortListPopup from "../../components/SortListPopup";
 import { LinkShopData } from "../../types/shopList";
 import { useSearchParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import ShopSkeleton from "./ShopSkeleton";
 
 const ShopList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [shopList, setShopList] = useState<LinkShopData[]>([]);
   const [orderbyPopupVisible, setOrderbyPopupVisible] =
     useState<boolean>(false);
+  const [isTimeout, setIsTimeout] = useState<boolean>(false);
 
   /* react-router-dom에서 URL파라미터를 담는 커스텀 훅 */
   const [searchParams, setSearchParams] = useSearchParams();
@@ -96,7 +98,14 @@ const ShopList = () => {
   };
 
   useEffect(() => {
+    setIsTimeout(false);
+    const timer = setTimeout(() => {
+      setIsTimeout(true);
+    }, 200000);
+
     fetchShopData();
+
+    return () => clearTimeout(timer);
   }, [fetchShopData]);
 
   /* debouncing을 사용하여 검색어를 지연 업데이트함 */
@@ -193,12 +202,20 @@ const ShopList = () => {
         dataLength={shopList.length}
         next={loadMoreShopData}
         hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
+        loader={
+          <styles.LoadingContainer>
+            <styles.ShopList>
+              {[1, 2, 3, 4].map((i) => (
+                <ShopSkeleton key={i} />
+              ))}
+            </styles.ShopList>
+          </styles.LoadingContainer>
+        }
       >
         <styles.ShopList>
           {shopList.length > 0 ? (
             shopList.map((shop) => <ShopInfo key={shop.id} shop={shop} />)
-          ) : (
+          ) : isTimeout ? (
             <styles.NoDataContainer>
               <styles.NoDataImage src={NoDataImg} />
               <styles.NoDataMessage>
@@ -207,6 +224,8 @@ const ShopList = () => {
                 지금 프로필을 만들고 내 상품을 소개해보세요
               </styles.NoDataMessage>
             </styles.NoDataContainer>
+          ) : (
+            [1, 2, 3, 4, 5, 6, 7, 8].map((i) => <ShopSkeleton key={i} />)
           )}
         </styles.ShopList>
       </InfiniteScroll>
