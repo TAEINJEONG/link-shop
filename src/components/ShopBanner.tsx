@@ -8,6 +8,8 @@ import ShopPreviewImage from "../assets/images/shop-image.svg";
 import * as styles from "./ShopBanner.styles";
 import { LinkShopData } from "../types/shopList";
 import api from "../api/axios";
+import PasswordDialog from "./PasswordDialog";
+import { useNavigate } from "react-router-dom";
 
 interface ShopInfoProps {
   shop: LinkShopData;
@@ -27,6 +29,9 @@ const ShopBanner = ({ shop }: ShopInfoProps) => {
   const [hasLike, setHasLike] = useState<boolean>(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isErrorToastVisible, setIsErrorToastVisible] = useState(false);
+  const navigate = useNavigate();
 
   const copyUrlToClipboard = useCallback(async () => {
     try {
@@ -78,55 +83,92 @@ const ShopBanner = ({ shop }: ShopInfoProps) => {
     };
   }, [handleClickOutside]);
 
+  const deleteShop = async (password: string) => {
+    try {
+      await api.deleteLinkShop("13-2", shopData.id, password);
+      navigate("/list");
+    } catch {
+      setIsErrorToastVisible(true);
+      setTimeout(() => setIsErrorToastVisible(false), 1000);
+    }
+  };
+
+  const openPasswordDialog = () => {
+    setIsMenuVisible(false);
+    setPasswordVisible(true);
+  };
+
+  const closePasswordDialog = () => {
+    setPasswordVisible(false);
+  };
+
   return (
-    <styles.BannerContainer>
-      <styles.BannerTopSection>
-        <styles.LikeShopButton onClick={() => toggleLike(shopData.id)}>
-          <styles.BaseIcon
-            src={hasLike ? filledHeart : emptyHeart}
-            alt="하트 아이콘"
-          />
-          <styles.LikeCount>{shopData.likes}</styles.LikeCount>
-        </styles.LikeShopButton>
-
-        <styles.RightIcons>
-          <styles.BaseIcon
-            src={Share}
-            onClick={copyUrlToClipboard}
-            alt="복사 아이콘"
-          />
-          <styles.MenuListContainer ref={menuRef}>
+    <>
+      <styles.BannerContainer>
+        <styles.BannerTopSection>
+          <styles.LikeShopButton onClick={() => toggleLike(shopData.id)}>
             <styles.BaseIcon
-              src={Menu}
-              onClick={openShopMenu}
-              alt="메뉴 아이콘"
+              src={hasLike ? filledHeart : emptyHeart}
+              alt="하트 아이콘"
             />
+            <styles.LikeCount>{shopData.likes}</styles.LikeCount>
+          </styles.LikeShopButton>
 
-            {isMenuVisible && (
-              <styles.ShopMenuList>
-                <styles.EditButton>수정하기</styles.EditButton>
-                <styles.MenuButton>삭제하기</styles.MenuButton>
-              </styles.ShopMenuList>
-            )}
-          </styles.MenuListContainer>
-        </styles.RightIcons>
-      </styles.BannerTopSection>
+          <styles.RightIcons>
+            <styles.BaseIcon
+              src={Share}
+              onClick={copyUrlToClipboard}
+              alt="복사 아이콘"
+            />
+            <styles.MenuListContainer ref={menuRef}>
+              <styles.BaseIcon
+                src={Menu}
+                onClick={openShopMenu}
+                alt="메뉴 아이콘"
+              />
 
-      <styles.BannerCenterSection>
-        <styles.ShopImage
-          src={shopData?.shop.imageUrl || ShopPreviewImage}
-          alt={`${shopData?.name} 매장 이미지`}
-        />
-        <styles.ShopName>{shopData?.name}</styles.ShopName>
-        <styles.ShopId>@{shopData?.userId}</styles.ShopId>
-      </styles.BannerCenterSection>
+              {isMenuVisible && (
+                <styles.ShopMenuList>
+                  <styles.EditButton>수정하기</styles.EditButton>
+                  <styles.MenuButton onClick={openPasswordDialog}>
+                    삭제하기
+                  </styles.MenuButton>
+                </styles.ShopMenuList>
+              )}
+            </styles.MenuListContainer>
+          </styles.RightIcons>
+        </styles.BannerTopSection>
 
-      {isToastVisible && (
-        <styles.ToastContainer>
-          <styles.ToastMessage>URL이 복사되었습니다!</styles.ToastMessage>
-        </styles.ToastContainer>
+        <styles.BannerCenterSection>
+          <styles.ShopImage
+            src={shopData?.shop.imageUrl || ShopPreviewImage}
+            alt={`${shopData?.name} 매장 이미지`}
+          />
+          <styles.ShopName>{shopData?.name}</styles.ShopName>
+          <styles.ShopId>@{shopData?.userId}</styles.ShopId>
+        </styles.BannerCenterSection>
+
+        {isToastVisible && (
+          <styles.ToastContainer>
+            <styles.ToastMessage>URL이 복사되었습니다!</styles.ToastMessage>
+          </styles.ToastContainer>
+        )}
+
+        {isErrorToastVisible && (
+          <styles.ErrorToastContainer>
+            <styles.ToastMessage>비밀번호가 틀렸습니다!</styles.ToastMessage>
+          </styles.ErrorToastContainer>
+        )}
+      </styles.BannerContainer>
+
+      {passwordVisible && (
+        <PasswordDialog
+          onClick={openPasswordDialog}
+          onClose={closePasswordDialog}
+          deleteShop={deleteShop}
+        ></PasswordDialog>
       )}
-    </styles.BannerContainer>
+    </>
   );
 };
 

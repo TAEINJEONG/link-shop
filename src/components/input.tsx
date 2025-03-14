@@ -5,15 +5,17 @@ import visibilityOff from "../assets/images/btn_visibility_off_24px.svg";
 
 interface InputProps {
   children?: React.ReactNode;
-  label: string;
+  label?: string;
   placeholder?: string;
   errorMessage?: string;
   type: "common" | "password";
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   position: relative;
 `;
 
@@ -59,6 +61,7 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   errorMessage,
   type,
+  onChange,
 }) => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
@@ -68,8 +71,9 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <InputWrapper>
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <StyledInput
+        onChange={onChange}
         type={type === "password" && !passwordVisible ? "password" : "text"}
         placeholder={
           type === "password"

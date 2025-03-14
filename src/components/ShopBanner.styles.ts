@@ -153,6 +153,11 @@ export const ToastContainer = styled.div`
   border-radius: 24px;
   background-color: ${({ theme }) => theme.colors.gray300};
   animation: ${toastFadeIn} 0.1s ease-in-out;
+  z-index: 999;
+`;
+
+export const ErrorToastContainer = styled(ToastContainer)`
+  background-color: ${({ theme }) => theme.colors.brandRed};
 `;
 
 export const ToastIcon = styled.img`

@@ -94,10 +94,10 @@ const api = {
   deleteLinkShop: (
     team: string,
     linkshopId: string,
-    password: string,
+    currentPassword: string,
   ): Promise<AxiosResponse<void>> =>
     apiClient.delete(apiRoutes.recipients.detail(team, linkshopId), {
-      data: { password },
+      data: { currentPassword },
     }),
 
   // 🔹 링크샵 좋아요 추가
