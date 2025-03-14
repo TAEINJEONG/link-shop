@@ -3,8 +3,7 @@ import CloseIcon from "../assets/images/close-icon.svg";
 import CheckIcon from "../assets/images/check-icon.svg";
 
 interface SortProps {
-  active: "recent" | "likes" | "productsCount";
-  // eslint-disable-next-line no-unused-vars
+  active: string;
   onClick: (value: "recent" | "likes" | "productsCount") => void;
   onClose?: () => void;
 }

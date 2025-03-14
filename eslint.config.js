@@ -29,6 +29,7 @@ export default [
       "prefer-const": "error", // 변경되지 않는 변수 const 선언 강제
       "prettier/prettier": "error", // Prettier 룰 적용
       "react/react-in-jsx-scope": "off", // React 17+에서는 필요 없음
+      "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         { args: "none" }, // 함수 매개변수 검사하지 않도록 설정

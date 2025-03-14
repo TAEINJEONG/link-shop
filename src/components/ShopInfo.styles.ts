@@ -2,8 +2,19 @@ import styled from "styled-components";
 
 export const ShopInfoContainer = styled.div`
   padding: 24px;
+  width: calc(50% - 60px);
   border-radius: 25px;
+  color: ${({ theme }) => theme.colors.black};
   background-color: ${({ theme }) => theme.colors.white100};
+
+  @media only screen and (max-width: 1199px) {
+    width: 100%;
+  }
+
+  @media only screen and (max-width: 744px) {
+    width: 100%;
+    overflow: scroll;
+  }
 `;
 
 export const ShopInfoHeaderSection = styled.div`
@@ -21,6 +32,7 @@ export const ShopImage = styled.img`
   margin-right: 15px;
   width: 60px;
   height: 60px;
+  border-radius: 99px;
 `;
 
 export const ShopTextSection = styled.div`
@@ -75,9 +87,13 @@ export const ProductCount = styled.span`
 export const productImageList = styled.div`
   display: flex;
   gap: 12px;
+
+  @media only screen and (max-width: 744px) {
+    overflow: scroll;
+  }
 `;
 
-export const PorductImage = styled.img`
+export const ProductImage = styled.img`
   width: 95px;
   height: 95px;
   border-radius: 15px;
