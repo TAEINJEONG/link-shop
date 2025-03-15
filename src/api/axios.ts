@@ -5,15 +5,15 @@ type ApiResponse<T> = AxiosResponse<{ list: T[]; nextCursor: string | null }>;
 
 // 개별 상품 데이터 타입
 export interface Product {
-  id: number;
+  id?: number | string;
   imageUrl: string;
   name: string;
-  price: string;
+  price: number;
 }
 
 // shop에 대한 상세 타입
 export interface Shop {
-  id: string;
+  id?: string;
   shopUrl: string;
   urlName: string;
   imageUrl: string;
@@ -21,18 +21,20 @@ export interface Shop {
 
 // API에서 받아오는 원본 데이터 타입 (개별 링크샵 데이터)
 export interface LinkShopData {
-  id: string;
+  id?: string;
   name: string;
   userId: string;
   shop: Shop;
-  likes: number;
-  teamId: string;
-  productsCount: number;
+  likes?: number;
+  teamId?: string;
+  productsCount?: number;
+  password?: string | undefined;
   products: Product[];
+  // password?: string;
 }
 
 // 파일 업로드 타입
-interface FileUploadData {
+export interface FileUploadData {
   file: File;
 }
 
@@ -115,8 +117,10 @@ const api = {
     apiClient.delete(apiRoutes.recipients.like(team, linkshopId)),
 
   // 🔹 파일 업로드
-  uploadFile: (data: FileUploadData): Promise<AxiosResponse<{ url: string }>> =>
-    apiClient.post("/images/upload", data),
+  uploadFile: (data: FormData): Promise<AxiosResponse<{ url: string }>> =>
+    apiClient.post("/images/upload", data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
 };
 
 export default api;

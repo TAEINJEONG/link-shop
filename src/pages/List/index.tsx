@@ -9,7 +9,7 @@ import Button from "../../components/Button";
 import ShopInfo from "../../components/ShopInfo";
 import SortListPopup from "../../components/SortListPopup";
 import { LinkShopData } from "../../types/shopList";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShopInfoSkeleton from "../../components/ShopInfo/ShopInfoSkeleton";
 
@@ -165,9 +165,11 @@ const List = () => {
     <styles.ShopListContainer>
       <styles.HeaderNavigation>
         <styles.Logo src={LogoImage} alt="로고" />
-        <Button variant="Primary" size="medium">
-          생성하기
-        </Button>
+        <Link to="/linkpost">
+          <Button variant="Primary" size="medium">
+            생성하기
+          </Button>
+        </Link>
       </styles.HeaderNavigation>
 
       <styles.InputContainer>

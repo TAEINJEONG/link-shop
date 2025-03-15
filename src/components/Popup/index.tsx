@@ -1,14 +1,20 @@
 import * as styles from "./index.styles";
 import Button from "../Button";
-import PopupCheck from "../assets/images/popup-check.svg";
+import PopupCheck from "../../assets/images/popup-check.svg";
 
 interface PopupProps {
   type: "confirm" | "alert";
+  handleNavigate?: (id: any) => void;
   onConfirm?: () => void;
   onCancel?: () => void;
 }
 
-const Popup = ({ type = "confirm", onConfirm, onCancel }: PopupProps) => {
+const Popup = ({
+  type = "confirm",
+  handleNavigate,
+  onConfirm,
+  onCancel,
+}: PopupProps) => {
   return (
     <styles.OutSide>
       <styles.PopupContainer>
@@ -22,7 +28,12 @@ const Popup = ({ type = "confirm", onConfirm, onCancel }: PopupProps) => {
         )}
 
         {type === "confirm" ? (
-          <Button variant="Primary" size="large" width={160}>
+          <Button
+            variant="Primary"
+            size="large"
+            width={160}
+            onClick={handleNavigate}
+          >
             확인
           </Button>
         ) : (

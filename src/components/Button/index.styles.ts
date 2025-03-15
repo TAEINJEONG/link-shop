@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 export const StyledButton = styled.button<{
-  $variant: "Primary" | "Secondary";
+  $variant: "Primary" | "Secondary" | "Danger";
   size: "small" | "medium" | "large";
   width?: number;
 }>`
@@ -10,7 +10,7 @@ export const StyledButton = styled.button<{
   justify-content: center;
   border: none;
   cursor: pointer;
-  width: ${({ width }) => (width ? `${width}px` : "auto")};
+  width: ${({ width }) => (width ? `${width}px` : `100%`)};
 
   ${({ size }) => {
     switch (size) {
@@ -48,6 +48,11 @@ export const StyledButton = styled.button<{
       case "Primary":
         return css`
           background-color: ${({ theme }) => theme.colors.brandBlue};
+          color: white;
+        `;
+      case "Danger":
+        return css`
+          background-color: ${({ theme }) => theme.colors.brandRed};
           color: white;
         `;
       case "Secondary":

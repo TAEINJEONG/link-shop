@@ -7,8 +7,10 @@ interface InputProps {
   children?: React.ReactNode;
   label?: string;
   placeholder?: string;
-  errorMessage?: string;
-  type: "common" | "password";
+  errorMessage?: string | null;
+  type: "common" | "password" | "number";
+  name?: string;
+  value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -18,6 +20,7 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   errorMessage,
   type,
+  name,
   onChange,
 }) => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -31,6 +34,7 @@ const Input: React.FC<InputProps> = ({
       {label && <styles.Label>{label}</styles.Label>}
       <styles.StyledInput
         onChange={onChange}
+        name={name}
         type={type === "password" && !passwordVisible ? "password" : "text"}
         placeholder={
           type === "password"

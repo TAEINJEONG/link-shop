@@ -10,6 +10,7 @@ export const UploaderGroup = styled.div`
 export const Label = styled.label`
   margin-bottom: 10px;
   font-size: ${({ theme }) => theme.font.caption.sb14.size};
+  font-weight: ${({ theme }) => theme.font.caption.sb14.weight};
   color: ${({ theme }) => theme.colors.black};
 `;
 

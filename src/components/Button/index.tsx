@@ -3,7 +3,7 @@ import * as styles from "./index.styles";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant: "Primary" | "Secondary";
+  variant: "Primary" | "Secondary" | "Danger";
   size: "small" | "medium" | "large";
   width?: number;
 }
@@ -12,6 +12,7 @@ const Button = ({
   children,
   variant = "Primary",
   size = "medium",
+  color = "blue",
   width,
   ...rest
 }: ButtonProps) => {
