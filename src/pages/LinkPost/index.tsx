@@ -1,4 +1,4 @@
-const ShopForm = () => {
+const LinkPost = () => {
   return (
     <div>
       <h1>Shop Form 입니다.</h1>
@@ -6,4 +6,4 @@ const ShopForm = () => {
   );
 };
 
-export default ShopForm;
+export default LinkPost;

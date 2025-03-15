@@ -7,7 +7,7 @@ import ShopTent from "../../assets/images/long-store-tent.svg";
 import backIcon from "../../assets/images/back-icon.svg";
 import * as styles from "./index.styles";
 
-const ShopDetail = () => {
+const Shop = () => {
   const [shopData, setShopData] = useState<LinkShopData>();
   const { id } = useParams();
 
@@ -54,4 +54,4 @@ const ShopDetail = () => {
   );
 };
 
-export default ShopDetail;
+export default Shop;

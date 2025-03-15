@@ -13,7 +13,7 @@ import { useSearchParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShopInfoSkeleton from "../../components/ShopInfo/ShopInfoSkeleton";
 
-const ShopList = () => {
+const List = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [shopList, setShopList] = useState<LinkShopData[]>([]);
   const [orderbyPopupVisible, setOrderbyPopupVisible] =
@@ -233,4 +233,4 @@ const ShopList = () => {
   );
 };
 
-export default ShopList;
+export default List;

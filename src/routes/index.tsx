@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "../pages/Layout";
-import ShopList from "../pages/ShopList/index";
-import ShopDetail from "../pages/ShopDetail";
-import ShopForm from "../pages/ShopForm";
+import List from "../pages/List/index";
+import Shop from "../pages/Shop";
+import LinkPost from "../pages/LinkPost";
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/list" element={<ShopList />}></Route>
-          <Route path="/:id" element={<ShopDetail />}></Route>
-          <Route path="/linkpost" element={<ShopForm />}></Route>
+          <Route path="/list" element={<List />}></Route>
+          <Route path="/:id" element={<Shop />}></Route>
+          <Route path="/linkpost" element={<LinkPost />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
