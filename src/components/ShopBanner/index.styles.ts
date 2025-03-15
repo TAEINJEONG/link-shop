@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 
-// ✨ 애니메이션 정의
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -23,7 +22,6 @@ const toastFadeIn = keyframes`
   }
 `;
 
-// ✨ 컨테이너 스타일
 export const BannerContainer = styled.div`
   padding: 20px 24px;
   border-radius: 24px;
@@ -52,7 +50,6 @@ export const LikeCount = styled.span`
   line-height: ${({ theme }) => theme.font.caption.b16.lineHeight};
 `;
 
-// ✨ 공통 아이콘 스타일
 export const BaseIcon = styled.img`
   margin-right: 5px;
   width: 23px;
@@ -69,7 +66,6 @@ export const MenuListContainer = styled.div`
   height: 23px;
 `;
 
-// ✨ 드롭다운 메뉴 스타일
 export const ShopMenuList = styled.div`
   display: flex;
   flex-direction: column;
@@ -109,7 +105,6 @@ export const RightIcons = styled.div`
   position: relative;
 `;
 
-// ✨ 중앙 섹션 스타일
 export const BannerCenterSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -139,7 +134,6 @@ export const ShopId = styled.span`
   color: ${({ theme }) => theme.colors.gray300};
 `;
 
-// ✨ 토스트 메시지 스타일
 export const ToastContainer = styled.div`
   display: flex;
   align-items: center;

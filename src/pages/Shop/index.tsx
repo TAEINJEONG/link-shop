@@ -6,6 +6,8 @@ import ShopBanner from "../../components/ShopBanner";
 import ShopTent from "../../assets/images/long-store-tent.svg";
 import backIcon from "../../assets/images/back-icon.svg";
 import * as styles from "./index.styles";
+import * as skeleton from "./index.skeleton";
+import ShopBannerSkeleton from "../../components/ShopBanner/ShopBannerSkeleton";
 
 const Shop = () => {
   const [shopData, setShopData] = useState<LinkShopData>();
@@ -33,21 +35,30 @@ const Shop = () => {
           <styles.prevTag src={backIcon} />
           <styles.PrevPage to="/list">돌아가기</styles.PrevPage>
         </styles.PrevContainer>
-        {shopData && <ShopBanner shop={shopData} />}
+        {shopData ? <ShopBanner shop={shopData} /> : <ShopBannerSkeleton />}
         <styles.representativeProduct>대표 상품</styles.representativeProduct>
         <styles.ProductList>
-          {shopData?.products &&
-            shopData.products.map((product) => (
-              <styles.Product>
-                <styles.ProductImage src={product.imageUrl} />
-                <styles.ProductInfoContainer>
-                  <styles.ProductName>{product.name}</styles.ProductName>
-                  <styles.ProductPrice>
-                    ₩{product.price.toLocaleString()}
-                  </styles.ProductPrice>
-                </styles.ProductInfoContainer>
-              </styles.Product>
-            ))}
+          {shopData?.products
+            ? shopData.products.map((product) => (
+                <styles.Product key={product.id}>
+                  <styles.ProductImage src={product.imageUrl} />
+                  <styles.ProductInfoContainer>
+                    <styles.ProductName>{product.name}</styles.ProductName>
+                    <styles.ProductPrice>
+                      ₩{product.price.toLocaleString()}
+                    </styles.ProductPrice>
+                  </styles.ProductInfoContainer>
+                </styles.Product>
+              ))
+            : [1, 2, 3].map((i) => (
+                <skeleton.Product key={i}>
+                  <skeleton.ProductImage />
+                  <skeleton.ProductInfoContainer>
+                    <skeleton.ProductName />
+                    <skeleton.ProductPrice />
+                  </skeleton.ProductInfoContainer>
+                </skeleton.Product>
+              ))}
         </styles.ProductList>
       </styles.ShopContainer>
     </>
