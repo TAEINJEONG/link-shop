@@ -38,36 +38,48 @@ export interface FileUploadData {
   file: File;
 }
 
-interface EditShop {
+interface ShopData {
+  shop: {
+    imageUrl: string;
+    urlName: string;
+    shopUrl: string;
+  };
+  products: {
+    id: string;
+    price: number | string;
+    imageUrl: string;
+    name: string;
+  }[];
+  password?: string; // 생성 모드 사용
+  currentPassword?: string; // 수정 모드 사용
+  userId: string;
+  name: string;
+}
+
+export interface ShopResponse extends ShopData {
+  id: number;
+  likes: number;
+  productsCount?: number;
+  teamId: string;
+  _count: { products: number };
+  shop: ShopResponseShop;
+  products: ShopResponseProduct[];
+}
+
+interface ShopResponseShop {
+  id: number;
+  linkShopId: number;
   imageUrl: string;
   urlName: string;
   shopUrl: string;
-  id: number;
-  linkShopId: number;
 }
 
-interface EditProduct {
-  id: number;
-  imageUrl: string;
-  linkShopId: number;
-  name: string;
+interface ShopResponseProduct {
+  id: string;
   price: number | string;
-}
-
-interface _count {
-  products: number;
-}
-
-interface EditShopData {
-  id: number;
+  imageUrl: string;
   name: string;
-  userId: string;
-  teamId: string;
-  products: EditProduct[];
-  currentPassword: string;
-  shop: EditShop;
-  likes: number;
-  _count: _count;
+  linkShopId: number;
 }
 
 // API 클라이언트 생성
@@ -113,7 +125,7 @@ const api = {
   getLinkShopById: (
     team: string,
     linkshopId: string,
-  ): Promise<AxiosResponse<EditShopData>> =>
+  ): Promise<AxiosResponse<ShopResponse>> =>
     apiClient.get(apiRoutes.recipients.detail(team, linkshopId)),
 
   // 🔹 링크샵 수정

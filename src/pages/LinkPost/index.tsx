@@ -1,50 +1,177 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import api, { LinkShopData } from "../../api/axios";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
+import ImageUploader from "../../components/ImageUploader";
+import ProductForm from "../../components/ProductForm";
+import Popup from "../../components/Popup";
 import * as styles from "./index.styles";
 import LogoImage from "../../assets/images/logo.svg";
-import Button from "../../components/Button";
-import ProductForm from "../../components/ProductForm";
-import ImageUploader from "../../components/ImageUploader";
-import Input from "../../components/Input";
-import { LinkShopData, Product } from "../../api/axios";
-import React, { useState } from "react";
-import api from "../../api/axios";
-import Popup from "../../components/Popup";
 
-const LinkPost = () => {
+/**
+ * 기본 폼 데이터 타입 (생성 시 사용할 데이터 구조)
+ */
+interface ShopData {
+  shop: {
+    imageUrl: string;
+    urlName: string;
+    shopUrl: string;
+  };
+  products: {
+    id: string;
+    price: number | string;
+    imageUrl: string;
+    name: string;
+  }[];
+  password?: string; // 생성 모드 사용
+  currentPassword?: string; // 수정 모드 사용
+  userId: string;
+  name: string;
+}
+
+/**
+ * GET API 응답 타입 (추가 필드 포함)
+ */
+interface ShopResponse extends ShopData {
+  id: number;
+  likes: number;
+  teamId: string;
+  _count: { products: number };
+  shop: ShopResponseShop;
+  products: ShopResponseProduct[];
+}
+
+interface ShopResponseShop {
+  id: number;
+  linkShopId: number;
+  imageUrl: string;
+  urlName: string;
+  shopUrl: string;
+}
+
+interface ShopResponseProduct {
+  id: string;
+  price: number | string;
+  imageUrl: string;
+  name: string;
+  linkShopId: number;
+}
+
+/**
+ * PUT 요청에 사용할 데이터 타입: GET 응답의 불필요한 필드를 제거
+ */
+type PutShopData = Omit<
+  ShopResponse,
+  "id" | "likes" | "teamId" | "_count" | "shop" | "products"
+> & {
+  shop: Omit<ShopResponseShop, "id" | "linkShopId">;
+  products: Omit<ShopResponseProduct, "id" | "linkShopId">[];
+};
+
+const sanitizeShopData = (
+  data: ShopResponse,
+  isEditMode: boolean,
+): PutShopData => {
+  // data에서 id, likes, teamId, _count, shop, products 필드를 분리합니다.
+  // 나머지 필드에는 password와 currentPassword 등이 포함됩니다.
+  const { id, likes, teamId, _count, shop, products, ...restWithoutShop } =
+    data;
+
+  // 생성 모드일 경우, currentPassword는 필요 없으므로 제거합니다.
+  const cleanRest = isEditMode
+    ? restWithoutShop
+    : (({ currentPassword, ...rest }) => rest)(restWithoutShop);
+
+  // shop 객체에서 id와 linkShopId를 제거합니다.
+  const { id: shopId, linkShopId, ...cleanShop } = shop;
+
+  // 각 product에서 id와 linkShopId를 제거하고, price를 숫자로 변환합니다.
+  const cleanProducts: Array<Omit<ShopResponseProduct, "id" | "linkShopId">> =
+    products.map(({ id, linkShopId, ...product }) => ({
+      ...product,
+      price:
+        typeof product.price === "string"
+          ? product.price.trim() === ""
+            ? 0
+            : Number(product.price)
+          : product.price,
+    }));
+
+  return {
+    ...cleanRest,
+    shop: cleanShop,
+    products: cleanProducts,
+  };
+};
+
+const LinkShopForm = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [shopData, setShopData] = useState<LinkShopData>({
+  // id가 있으면 수정 모드, 없으면 생성 모드
+  const isEditMode = Boolean(id);
+
+  /**
+   * 초기 상태는 생성 시 사용할 값에 GET 응답의 필드들을 포함할 기본값을 설정합니다.
+   * 수정 모드에서는 GET API를 통해 전체 데이터를 받아오게 됩니다.
+   */
+  const [shopData, setShopData] = useState<ShopResponse>({
+    id: 0,
+    likes: 0,
+    teamId: "",
+    _count: { products: 0 },
     shop: {
+      id: 0,
+      linkShopId: 0,
       imageUrl: "",
       urlName: "",
       shopUrl: "",
     },
     products: [
       {
-        id: `product-${Date.now()}`, // 고유 id 부여
+        id: `product-${Date.now()}`,
         price: "",
         imageUrl: "",
         name: "",
+        linkShopId: 0,
       },
     ],
-    password: "",
     userId: "",
     name: "",
+    password: "", // 생성 모드 사용
+    currentPassword: "", // 수정 모드 사용
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<{
-    userId?: string;
-    shopUrl?: string;
-    password?: string;
-  }>({});
-  const [popupVisible, setPopupVisible] = useState<boolean>(false);
-  const [linkId, setLinkId] = useState<string>("");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [linkId, setLinkId] = useState("");
+  const [errorMessage, setErrorMessage] = useState<{ [key: string]: string }>(
+    {},
+  );
+
+  // 편집 모드일 경우, 기존 데이터를 GET API로 받아옴
+  const fetchShopData = useCallback(async () => {
+    if (isEditMode && id) {
+      try {
+        const res = await api.getLinkShopById("13-2", id);
+        setShopData(res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [id, isEditMode]);
+
+  useEffect(() => {
+    fetchShopData();
+  }, [fetchShopData]);
+
+  // 공통 입력 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setErrorMessage((prev) => ({ ...prev, [name]: "" }));
 
     setShopData((prevData) => {
+      // shop 객체의 필드일 경우
       if (["imageUrl", "urlName", "shopUrl"].includes(name)) {
         return {
           ...prevData,
@@ -54,11 +181,7 @@ const LinkPost = () => {
           },
         };
       }
-
-      return {
-        ...prevData,
-        [name]: value,
-      };
+      return { ...prevData, [name]: value };
     });
   };
 
@@ -74,11 +197,12 @@ const LinkPost = () => {
 
   const handleAddProduct = () => {
     if (shopData.products.length >= 3) return;
-    const newProduct: Product = {
-      id: `product-${Date.now()}`, // 고유 id 생성 (또는 uuid 라이브러리 사용)
-      price: 0,
+    const newProduct = {
+      id: `product-${Date.now()}`,
+      price: "",
       imageUrl: "",
       name: "",
+      linkShopId: 0,
     };
     setShopData((prevData) => ({
       ...prevData,
@@ -88,7 +212,7 @@ const LinkPost = () => {
 
   const handleProductChange = (
     index: number,
-    field: keyof Product,
+    field: keyof (typeof shopData.products)[0],
     value: string | number,
   ) => {
     setShopData((prevData) => {
@@ -101,33 +225,41 @@ const LinkPost = () => {
     });
   };
 
-  /* 대표 상품 삭제 기능 */
-  const handleDeleteProduct = (id: string) => {
-    if (shopData.products[0].id === id) return;
+  const handleDeleteProduct = (productId: string) => {
+    if (shopData.products[0].id === productId) return;
     setShopData((prevData) => ({
       ...prevData,
-      products: prevData.products.filter((product) => product.id !== id),
+      products: prevData.products.filter((product) => product.id !== productId),
     }));
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true); // 버튼 비활성화 및 텍스트 변경
-
-      const cleanProducts = shopData.products.map(({ id, ...rest }) => rest);
-      const cleanShopData = { ...shopData, products: cleanProducts };
-
-      const response = await api.postLinkShop("13-2", cleanShopData);
-      const { id } = response.data;
-
-      if (id) {
-        setLinkId(id);
+      let response;
+      if (isEditMode) {
+        // 수정 모드: GET 응답 데이터를 정제하여 PUT 요청
+        const cleanData = sanitizeShopData(shopData, isEditMode);
+        response = await api.putLinkShop(
+          "13-2",
+          Number(id),
+          cleanData as unknown as LinkShopData,
+        );
+      } else {
+        // 생성 모드: 정제한 데이터를 POST 요청
+        const cleanData = sanitizeShopData(shopData, isEditMode);
+        response = await api.postLinkShop(
+          "13-2",
+          cleanData as unknown as LinkShopData,
+        );
       }
 
+      if (response.data?.id) {
+        setLinkId(String(response.data.id));
+      }
       setPopupVisible(true);
     } catch (e: any) {
-      const errors: { userId?: string; shopUrl?: string; password?: string } =
-        {};
+      const errors: { [key: string]: string } = {};
       if (
         e.response?.data?.details?.name?.message ===
         "이미 존재하는 아이디입니다."
@@ -142,16 +274,30 @@ const LinkPost = () => {
         errors.shopUrl = "올바른 주소를 입력해 주세요.";
       }
 
-      if (
-        e.response.data.details?.["requestBody.password"]?.message ===
-        "minLength 6"
-      ) {
-        errors.password = "6자리 이상 입력해주세요.";
+      if (isEditMode) {
+        if (
+          e.response?.data?.details?.["requestBody.currentPassword"]
+            ?.message === "minLength 6"
+        ) {
+          errors.currentPassword = "6자리 이상 입력해주세요.";
+        } else if (
+          e.response?.data?.details?.name?.message ===
+          "비밀번호가 일치하지 않습니다."
+        ) {
+          errors.currentPassword = "비밀번호가 일치하지 않습니다.";
+        }
+      } else {
+        if (
+          e.response.data.details?.["requestBody.password"]?.message ===
+          "minLength 6"
+        ) {
+          errors.password = "6자리 이상 입력해주세요.";
+        }
       }
 
       setErrorMessage(errors);
     } finally {
-      setIsSubmitting(false); // 제출 완료 후 버튼 상태 복원
+      setIsSubmitting(false);
     }
   };
 
@@ -161,15 +307,17 @@ const LinkPost = () => {
     }
   };
 
+  // 폼 유효성 검사
   const isFormValid =
     shopData.shop.imageUrl !== "" &&
     shopData.products.every(
       (product) =>
-        product.name !== "" && product.price > 0 && product.imageUrl !== "",
+        product.name !== "" && product.price !== "" && product.imageUrl !== "",
     ) &&
     shopData.name !== "" &&
     shopData.userId !== "" &&
-    shopData.password !== "";
+    ((isEditMode && shopData.currentPassword) ||
+      (!isEditMode && shopData.password));
 
   return (
     <styles.LinkPostContainer>
@@ -198,9 +346,7 @@ const LinkPost = () => {
               variant="Danger"
               size="small"
               width={100}
-              onClick={() =>
-                product.id && handleDeleteProduct(String(product.id))
-              }
+              onClick={() => handleDeleteProduct(product.id)}
             >
               삭제
             </Button>
@@ -218,7 +364,7 @@ const LinkPost = () => {
       </styles.TopLabel>
       <styles.ProductFormContainer>
         <ImageUploader
-          imageUrl={shopData?.shop?.imageUrl}
+          imageUrl={shopData.shop.imageUrl}
           onImageUpload={handleImageUpload}
         />
         <styles.InputContainer>
@@ -256,12 +402,14 @@ const LinkPost = () => {
         <styles.passwordInputContainer>
           <Input
             label="비밀번호"
-            name="password"
+            name={isEditMode ? "currentPassword" : "password"}
             type="password"
             placeholder="비밀번호를 입력해주세요"
-            value={shopData.password}
+            value={isEditMode ? shopData.currentPassword! : shopData.password!}
             onChange={handleChange}
-            errorMessage={errorMessage.password}
+            errorMessage={
+              isEditMode ? errorMessage.currentPassword : errorMessage.password
+            }
           />
         </styles.passwordInputContainer>
       </styles.ProductFormContainer>
@@ -273,13 +421,23 @@ const LinkPost = () => {
           onClick={handleSubmit}
           disabled={isSubmitting || !isFormValid}
         >
-          {isSubmitting ? "잠시만 기다려 주세요..." : "생성하기"}
+          {isSubmitting
+            ? isEditMode
+              ? "수정 중..."
+              : "생성 중..."
+            : isEditMode
+              ? "수정하기"
+              : "생성하기"}
         </Button>
       </styles.ButtonContainer>
 
-      {popupVisible && <Popup type="confirm" handleNavigate={handleNavigate} />}
+      {popupVisible && (
+        <Popup type="confirm" handleNavigate={handleNavigate}>
+          {isEditMode ? "수정되었습니다." : "등록되었습니다."}
+        </Popup>
+      )}
     </styles.LinkPostContainer>
   );
 };
 
-export default LinkPost;
+export default LinkShopForm;

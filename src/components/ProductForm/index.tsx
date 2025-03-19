@@ -5,9 +5,9 @@ import ImageUploader from "../ImageUploader";
 import { Product } from "../../api/axios";
 
 interface EditProduct {
-  id: number;
+  id: number | string;
   imageUrl: string;
-  linkShopId: number;
+  linkShopId?: number;
   name: string;
   price: number | string;
 }

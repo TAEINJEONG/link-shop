@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { LinkShopData } from "../../types/shopList";
+import { LinkShopData, ShopResponse } from "../../api/axios";
 import api from "../../api/axios";
 import ShopBanner from "../../components/ShopBanner";
 import ShopTent from "../../assets/images/long-store-tent.svg";
@@ -13,11 +13,44 @@ const Shop = () => {
   const [shopData, setShopData] = useState<LinkShopData>();
   const { id } = useParams();
 
+  const convertShopResponseToLinkShopData = (
+    data: ShopResponse,
+  ): LinkShopData => ({
+    // ShopResponse의 id를 문자열로 변환
+    id: data.id.toString(),
+    name: data.name,
+    userId: data.userId,
+    // shop 부분도 변환하여 필요한 필드만 전달
+    shop: {
+      id: data.shop.id.toString(),
+      shopUrl: data.shop.shopUrl,
+      urlName: data.shop.urlName,
+      imageUrl: data.shop.imageUrl,
+    },
+    likes: data.likes,
+    teamId: data.teamId,
+    productsCount: data.productsCount,
+    password: data.password,
+    // products 배열의 각 항목의 id를 문자열로 변환
+    products: data.products.map((product) => ({
+      id: typeof product.id === "number" ? product.id : product.id,
+      imageUrl: product.imageUrl,
+      name: product.name,
+      price:
+        typeof product.price === "number"
+          ? product.price
+          : Number(product.price),
+    })),
+  });
+
   const fetchShopData = useCallback(async () => {
     if (!id) return;
     try {
       const shopResponse = await api.getLinkShopById("13-2", id);
-      setShopData(shopResponse.data);
+      const convertedData = convertShopResponseToLinkShopData(
+        shopResponse.data,
+      );
+      setShopData(convertedData);
     } catch (e) {
       console.log(e);
     }

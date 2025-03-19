@@ -38,6 +38,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         return;
       }
 
+      // blob URL을 생성하여 미리보기용 상태에 저장
+      const blobUrl = URL.createObjectURL(file[0]);
+      onImageUpload?.(blobUrl);
+
       try {
         const formData = new FormData();
         formData.append("image", file[0]);
