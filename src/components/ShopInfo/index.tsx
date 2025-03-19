@@ -2,7 +2,7 @@ import * as styles from "./index.styles";
 import ShopPreviewImage from "../../assets/images/shop-image.svg";
 import filledHeart from "../../assets/images/filled-heart.svg";
 import emptyHeart from "../../assets/images/empty-heart.svg";
-import { LinkShopData } from "../../types/shopList";
+import { LinkShopData } from "../../api/axios";
 import { useCallback, useState } from "react";
 import api from "../../api/axios";
 import { Link } from "react-router-dom";
@@ -26,14 +26,14 @@ const ShopInfo = ({ shop }: ShopInfoProps) => {
             setHasLike(true);
             setShopData((prevData) => ({
               ...prevData,
-              likes: prevData.likes + 1,
+              likes: prevData.likes! + 1,
             }));
           } else {
             await api.deleteLinkShopLike("13-2", shopId);
             setHasLike(false);
             setShopData((prevData) => ({
               ...prevData,
-              likes: prevData.likes - 1,
+              likes: prevData.likes! - 1,
             }));
           }
           setIsLoading(false);
@@ -59,7 +59,9 @@ const ShopInfo = ({ shop }: ShopInfoProps) => {
           </styles.ShopTextSection>
         </styles.ShopInfoHeaderLeft>
 
-        <styles.ShopInfoHeaderRight onClick={() => toggleLike(shopData.id)}>
+        <styles.ShopInfoHeaderRight
+          onClick={() => toggleLike(String(shopData.id))}
+        >
           <styles.LikeIcon src={hasLike ? filledHeart : emptyHeart} />
           <styles.LikeCount>{shopData.likes}</styles.LikeCount>
         </styles.ShopInfoHeaderRight>

@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../pages/Layout";
 import List from "../pages/List/index";
 import Shop from "../pages/Shop";
-import LinkPost from "../pages/LinkPost";
-import LinkEdit from "../pages/LinkPost/[id]/edit";
+import LinkShopForm from "../pages/LinkPost";
 
 const AppRouter = () => {
   return (
@@ -14,8 +13,8 @@ const AppRouter = () => {
           <Route path="/" element={<Navigate to="/list" replace />}></Route>
           <Route path="/list" element={<List />}></Route>
           <Route path="/:id" element={<Shop />}></Route>
-          <Route path="/linkpost" element={<LinkPost />}></Route>
-          <Route path="/linkpost/:id/edit" element={<LinkEdit />}></Route>
+          <Route path="/linkpost" element={<LinkShopForm />}></Route>
+          <Route path="/linkpost/:id/edit" element={<LinkShopForm />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

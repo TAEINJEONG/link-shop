@@ -1,8 +1,10 @@
 import * as styles from "./index.styles";
+import React from "react";
 import Button from "../Button";
 import PopupCheck from "../../assets/images/popup-check.svg";
 
 interface PopupProps {
+  children: React.ReactNode;
   type: "confirm" | "alert";
   handleNavigate?: (id: any) => void;
   onConfirm?: () => void;
@@ -10,6 +12,7 @@ interface PopupProps {
 }
 
 const Popup = ({
+  children,
   type = "confirm",
   handleNavigate,
   onConfirm,
@@ -19,7 +22,7 @@ const Popup = ({
     <styles.OutSide>
       <styles.PopupContainer>
         {type === "confirm" ? (
-          <styles.PopupMessage>등록이 완료되었습니다.</styles.PopupMessage>
+          <styles.PopupMessage>{children}</styles.PopupMessage>
         ) : (
           <>
             <styles.PopupCheckIcon src={PopupCheck} />

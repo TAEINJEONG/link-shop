@@ -6,7 +6,7 @@ import Share from "../../assets/images/share.svg";
 import Menu from "../../assets/images/meatball-icon.svg";
 import ShopPreviewImage from "../../assets/images/shop-image.svg";
 import * as styles from "./index.styles";
-import { LinkShopData } from "../../types/shopList";
+import { LinkShopData } from "../../api/axios";
 import api from "../../api/axios";
 import PasswordDialog from "../PasswordDialog";
 
@@ -57,14 +57,14 @@ const ShopBanner = ({ shop }: ShopInfoProps) => {
             setHasLike(true);
             setShopData((prevData) => ({
               ...prevData,
-              likes: prevData.likes + 1,
+              likes: prevData.likes! + 1,
             }));
           } else {
             await api.deleteLinkShopLike("13-2", shopId);
             setHasLike(false);
             setShopData((prevData) => ({
               ...prevData,
-              likes: prevData.likes - 1,
+              likes: prevData.likes! - 1,
             }));
           }
           setIsLoading(false);
@@ -85,7 +85,7 @@ const ShopBanner = ({ shop }: ShopInfoProps) => {
 
   const deleteShop = async (password: string) => {
     try {
-      await api.deleteLinkShop("13-2", shopData.id, password);
+      await api.deleteLinkShop("13-2", String(shopData.id), password);
       navigate("/list");
     } catch {
       setIsErrorToastVisible(true);
@@ -110,7 +110,9 @@ const ShopBanner = ({ shop }: ShopInfoProps) => {
     <>
       <styles.BannerContainer>
         <styles.BannerTopSection>
-          <styles.LikeShopButton onClick={() => toggleLike(shopData.id)}>
+          <styles.LikeShopButton
+            onClick={() => toggleLike(String(shopData.id))}
+          >
             <styles.BaseIcon
               src={hasLike ? filledHeart : emptyHeart}
               alt="하트 아이콘"

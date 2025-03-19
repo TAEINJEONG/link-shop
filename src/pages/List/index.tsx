@@ -8,7 +8,7 @@ import NoDataImg from "../../assets/images/search-store.svg";
 import Button from "../../components/Button";
 import ShopInfo from "../../components/ShopInfo";
 import SortListPopup from "../../components/SortListPopup";
-import { LinkShopData } from "../../types/shopList";
+import { LinkShopData } from "../../api/axios";
 import { Link, useSearchParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShopInfoSkeleton from "../../components/ShopInfo/ShopInfoSkeleton";
