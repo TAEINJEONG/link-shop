@@ -101,7 +101,7 @@ const List = () => {
     setIsTimeout(false);
     const timer = setTimeout(() => {
       setIsTimeout(true);
-    }, 200000);
+    }, 5000);
 
     fetchShopData();
 
@@ -164,7 +164,9 @@ const List = () => {
   return (
     <styles.ShopListContainer>
       <styles.HeaderNavigation>
-        <styles.Logo src={LogoImage} alt="로고" />
+        <Link to="/list">
+          <styles.Logo src={LogoImage} alt="로고" />
+        </Link>
         <Link to="/linkpost">
           <Button variant="Primary" size="medium">
             생성하기

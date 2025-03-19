@@ -174,7 +174,9 @@ const LinkPost = () => {
   return (
     <styles.LinkPostContainer>
       <styles.HeaderNavigation>
-        <styles.Logo src={LogoImage} alt="로고" />
+        <Link to="/list">
+          <styles.Logo src={LogoImage} alt="로고" />
+        </Link>
         <Link to="/list">
           <Button variant="Primary" size="medium">
             돌아가기
