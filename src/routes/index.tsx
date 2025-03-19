@@ -4,6 +4,7 @@ import Layout from "../pages/Layout";
 import List from "../pages/List/index";
 import Shop from "../pages/Shop";
 import LinkPost from "../pages/LinkPost";
+import LinkEdit from "../pages/LinkPost/[id]/edit";
 
 const AppRouter = () => {
   return (
@@ -13,6 +14,7 @@ const AppRouter = () => {
           <Route path="/list" element={<List />}></Route>
           <Route path="/:id" element={<Shop />}></Route>
           <Route path="/linkpost" element={<LinkPost />}></Route>
+          <Route path="/linkpost/:id/edit" element={<LinkEdit />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

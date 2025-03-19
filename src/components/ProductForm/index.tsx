@@ -4,6 +4,14 @@ import Input from "../Input";
 import ImageUploader from "../ImageUploader";
 import { Product } from "../../api/axios";
 
+interface EditProduct {
+  id: number;
+  imageUrl: string;
+  linkShopId: number;
+  name: string;
+  price: number | string;
+}
+
 const FileImageUploader = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,7 +22,7 @@ const FormSection = styled.div`
 `;
 
 interface ProductProps {
-  product: Product;
+  product: EditProduct;
   index: number;
   onProductChange: (
     index: number,
@@ -36,8 +44,22 @@ const ProductFrom: React.FC<ProductProps> = ({
     onProductChange(index, "name", e.target.value);
   };
 
+  const formatNumberWithCommas = (value: number | string): string => {
+    if (value === "") return "";
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onProductChange(index, "price", Number(e.target.value));
+    // 쉼표 제거
+    const rawValue = e.target.value.replace(/,/g, "");
+    // 입력값이 빈 문자열이면 빈 문자열을 상태에 반영
+    if (rawValue === "") {
+      onProductChange(index, "price", "");
+      return;
+    }
+    if (isNaN(Number(rawValue))) return;
+    const numericValue = Number(rawValue);
+    onProductChange(index, "price", numericValue);
   };
 
   return (
@@ -64,7 +86,7 @@ const ProductFrom: React.FC<ProductProps> = ({
           label="상품 가격"
           type="number"
           placeholder="원화로 표기해주세요."
-          value={product.price}
+          value={formatNumberWithCommas(product.price)}
           onChange={handlePriceChange}
         />
       </FormSection>

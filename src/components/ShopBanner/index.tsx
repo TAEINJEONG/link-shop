@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import filledHeart from "../../assets/images/filled-heart.svg";
 import emptyHeart from "../../assets/images/empty-heart.svg";
 import Share from "../../assets/images/share.svg";
@@ -9,7 +9,6 @@ import * as styles from "./index.styles";
 import { LinkShopData } from "../../types/shopList";
 import api from "../../api/axios";
 import PasswordDialog from "../PasswordDialog";
-import { useNavigate } from "react-router-dom";
 
 interface ShopInfoProps {
   shop: LinkShopData;
@@ -22,6 +21,7 @@ const ShopBanner = ({ shop }: ShopInfoProps) => {
       setIsMenuVisible(false);
     }
   }, []);
+  const { id } = useParams();
   const location = useLocation();
   const currentPageUrl = window.location.origin + location.pathname;
   const [shopData, setShopData] = useState<LinkShopData>(shop);
@@ -93,6 +93,10 @@ const ShopBanner = ({ shop }: ShopInfoProps) => {
     }
   };
 
+  const handleEditNavigation = () => {
+    navigate(`/linkpost/${id}/edit`);
+  };
+
   const openPasswordDialog = () => {
     setIsMenuVisible(false);
     setPasswordVisible(true);
@@ -129,7 +133,9 @@ const ShopBanner = ({ shop }: ShopInfoProps) => {
 
               {isMenuVisible && (
                 <styles.ShopMenuList>
-                  <styles.EditButton>수정하기</styles.EditButton>
+                  <styles.EditButton onClick={handleEditNavigation}>
+                    수정하기
+                  </styles.EditButton>
                   <styles.MenuButton onClick={openPasswordDialog}>
                     삭제하기
                   </styles.MenuButton>

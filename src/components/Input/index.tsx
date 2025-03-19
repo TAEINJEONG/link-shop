@@ -21,6 +21,7 @@ const Input: React.FC<InputProps> = ({
   errorMessage,
   type,
   name,
+  value,
   onChange,
 }) => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -35,6 +36,7 @@ const Input: React.FC<InputProps> = ({
       <styles.StyledInput
         onChange={onChange}
         name={name}
+        value={value}
         type={type === "password" && !passwordVisible ? "password" : "text"}
         placeholder={
           type === "password"

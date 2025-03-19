@@ -21,7 +21,7 @@ export interface Shop {
 
 // API에서 받아오는 원본 데이터 타입 (개별 링크샵 데이터)
 export interface LinkShopData {
-  id?: string;
+  id?: string | number;
   name: string;
   userId: string;
   shop: Shop;
@@ -36,6 +36,38 @@ export interface LinkShopData {
 // 파일 업로드 타입
 export interface FileUploadData {
   file: File;
+}
+
+interface EditShop {
+  imageUrl: string;
+  urlName: string;
+  shopUrl: string;
+  id: number;
+  linkShopId: number;
+}
+
+interface EditProduct {
+  id: number;
+  imageUrl: string;
+  linkShopId: number;
+  name: string;
+  price: number | string;
+}
+
+interface _count {
+  products: number;
+}
+
+interface EditShopData {
+  id: number;
+  name: string;
+  userId: string;
+  teamId: string;
+  products: EditProduct[];
+  currentPassword: string;
+  shop: EditShop;
+  likes: number;
+  _count: _count;
 }
 
 // API 클라이언트 생성
@@ -81,16 +113,19 @@ const api = {
   getLinkShopById: (
     team: string,
     linkshopId: string,
-  ): Promise<AxiosResponse<LinkShopData>> =>
+  ): Promise<AxiosResponse<EditShopData>> =>
     apiClient.get(apiRoutes.recipients.detail(team, linkshopId)),
 
   // 🔹 링크샵 수정
   putLinkShop: (
     team: string,
-    linkshopId: string,
+    linkshopId: number,
     data: LinkShopData,
   ): Promise<AxiosResponse<LinkShopData>> =>
-    apiClient.put(apiRoutes.recipients.detail(team, linkshopId), data),
+    apiClient.put(
+      apiRoutes.recipients.detail(team, linkshopId.toString()),
+      data,
+    ),
 
   // 🔹 링크샵 삭제
   deleteLinkShop: (
