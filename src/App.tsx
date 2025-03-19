@@ -1,10 +1,14 @@
-import "./App.css";
+import AppRouter from "./routes";
+import { ThemeProvider } from "styled-components";
+import GlobalStyle from "./styles/GlobalStyle";
+import { theme } from "../src/styles/theme";
 
 function App() {
   return (
-    <>
-      <h1>Vite + React</h1>
-    </>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <AppRouter />
+    </ThemeProvider>
   );
 }
 
